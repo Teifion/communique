@@ -7,7 +7,7 @@ from sqlalchemy import (
 )
 
 # You will need to point this to wherever your declarative base is
-from ...models import Base
+from ..models import Base
 
 class Notification(Base):
     __tablename__ = 'notifications'
@@ -16,4 +16,5 @@ class Notification(Base):
     expiration    = Column(DateTime)
     
     message       = Column(String, nullable=False)
-    meta          = Column(String, nullable=False)
+    category      = Column(String, nullable=False)
+    data          = Column(String, nullable=False)

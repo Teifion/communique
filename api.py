@@ -1,12 +1,24 @@
-from datetime import datetime, timedelta
-
+from datetime import datetime
+from collections import namedtuple
+from .config import config
 from .models import Notification
 
-def new(user_id, message, meta, delay_until=None, expire_at=None):
-    """
-    Add a new message for a specific user
-    """
-    pass
+NotificationCategory = namedtuple("NotificationCategory", ["name", "label", "icon_path", "handler"])
+def register(name, label, icon_path, handler):
+    if name in config['handlers']:
+        raise KeyError("{} already exists".format(name))
+    
+    nc = NotificationCategory(name, label, icon_path, handler)
+    config['handlers']['name'] = nc
 
-def get():
-    pass
+def send(user, message, category, data, expires=None):
+    n = Notification(
+        user = user,
+        message = message,
+        category = category,
+        data = data,
+        expires = expires,
+        posted = datetime.now(),
+    )
+    
+    config['DBSession'].add(n)

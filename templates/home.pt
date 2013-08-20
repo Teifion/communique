@@ -1,0 +1,31 @@
+<div metal:use-macro="layout">
+    <style type="text/css" media="screen" metal:fill-slot="css">
+        
+    </style>
+    <div metal:fill-slot="header_buttons" style="display:inline-block;">
+        
+    </div>
+    <div metal:fill-slot="content">
+        <form action="${request.route_url('communique.save_preferences')}" method="post" accept-charset="utf-8" style="float:right;width:400px;" tal:condition="False">
+            <h2>Preferences</h2>
+            <table border="0" cellspacing="0" cellpadding="5" style="width:100%;">
+                <tr>
+                    <td><label for="some_name">Some name</label></td>
+                    <td><input type="text" name="some_name" id="some_name" value="5" /></td>
+                </tr>
+            </table>
+            
+            <input type="submit" value="Submit" name="form.submitted" class="inbutton" />
+        </form>
+        
+        <div class="">
+            <div class="" tal:repeat="n notifications">
+                ${n}
+            </div>
+        </div>
+    </div>
+    
+    <div metal:fill-slot="footer">
+        Open source - <a href="http://github.com/teifion/communique">http://github.com/teifion/communique</a>
+    </div>
+</div>

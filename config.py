@@ -25,6 +25,8 @@ config = {
     
     "get_user_func": lambda r: KeyError("No function exists to get the user"),
     "get_user": AUser,
+    
+    "categories": {},
 }
 
 def example_config_constructor(config):
