@@ -11,9 +11,10 @@ from ..models import Base
 
 class Notification(Base):
     __tablename__ = 'notifications'
+    id            = Column(Integer, primary_key=True)
     user          = Column(Integer, ForeignKey("users.id"), nullable=False, primary_key=True)
     posted        = Column(DateTime, nullable=False)
-    expiration    = Column(DateTime)
+    expires       = Column(DateTime)
     
     message       = Column(String, nullable=False)
     category      = Column(String, nullable=False)

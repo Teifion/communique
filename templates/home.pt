@@ -20,7 +20,7 @@
         
         <div class="">
             <div class="" tal:repeat="n notifications">
-                ${n}
+                ${n.message} - <a href="${request.route_url('communique.view', notification_id=n.id)}">View</a>
             </div>
         </div>
     </div>
