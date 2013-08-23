@@ -17,3 +17,6 @@ def get_current(user_id):
     )
     
     return config['DBSession'].query(Notification).filter(*filters).order_by(Notification.posted.desc())
+
+def delete(the_notification):
+    config['DBSession'].delete(the_notification)

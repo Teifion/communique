@@ -32,11 +32,19 @@ def save_preferences(request):
     return HTTPFound(location=request.route_url('communique.home'))
 
 def view(request):
+    the_user = config['get_user_func'](request)
+    
     notification_id = int(request.matchdict['notification_id'])
     the_notification = lib.get(notification_id)
     
     if the_notification is None:
         raise Exception("No notification found")
     
+    if the_notification.user != the_user.id:
+        raise Exception("Only the appointed user can view the notification")
+    
     handler = config['handlers'][the_notification.category].handler
-    return handler(request, the_notification.data)
+    data = the_notification.data
+    lib.delete(the_notification)
+    
+    return handler(request, data)
