@@ -13,10 +13,9 @@ def home(request):
     layout = get_renderer(config['layout']).implementation()
     
     # Use this for testing
-    # from . import api
-    # api.send(1, "wordy.new_move", "Fred has made a move", "15")
-    # api.send(1, "wordy.new_game", "Bob has started a game with you", "20")
-    # api.send(1, "wordy.game_lost", "Gemma has won the game", "12")
+    from . import api
+    api.send(1, "wordy.new_move", "Fred has made a move", "15")
+    api.send(1, "wordy.new_game", "Bob has started a game with you", "20")
     
     return dict(
         title        = "Communique",
@@ -37,7 +36,7 @@ def mini_home(request):
             <a class="communique-notification-row" href="{communique_view}">
                 <img src="{icon}" class="communique-notification-icon" />
                 <div class="communique-notification-text">
-                    {title}: {message}
+                    <strong>{title}</strong>: {message}
                 </div>
             </a>
         """.format(

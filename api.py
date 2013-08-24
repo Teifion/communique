@@ -31,6 +31,9 @@ def send(user, category, message, data, expires=None):
     send(1, "wordy.game_lost", "Gemma has won the game", "12", timedelta(hours=6))
     """
     
+    if category not in config['handlers']:
+        raise KeyError("No handler for the communique category of '{}'".format(category))
+    
     # If it's a timedelta then convert it to a datetime
     if isinstance(expires, timedelta):
         expires = datetime.now() + expires
