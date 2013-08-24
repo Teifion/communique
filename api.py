@@ -49,3 +49,116 @@ def send(user, category, message, data, expires=None):
     )
     
     config['DBSession'].add(n)
+
+"""
+    Javascript and CSS to insert
+<script type="text/javascript" charset="utf-8">
+    function show_communique_menu ()
+    {
+        var is_vis = $("#communique-dropdown").is(":visible");
+        
+        if (is_vis == true)
+        {
+            $("#communique-dropdown").hide(250);
+        }
+        else
+        {
+            $('#communique-dropdown').load(
+                '${request.route_url('communique.mini_home')}',
+                {},
+                function () {
+                    $("#communique-dropdown").show(250);
+                }
+            );
+        }
+    }
+    
+    function get_communique_count ()
+    {
+        var result = '0';
+        $.ajax({
+            url: '${request.route_url('communique.home_count')}',
+            type: 'get',
+            async: false,
+            success: function(data) {
+                result = data;
+            }
+        });
+        
+        if (result != '0')
+        {
+            $('#communique-counter').html('(' + result + ')');
+            $('#communique-counter').show(100);
+        }
+        
+    }
+    
+    $(function() {
+        var commuique_menu = "<div id='communique-menu'><div onclick='show_communique_menu();'>Notifications<div id='communique-counter'></div></div><div id='communique-dropdown'></div></div>";
+        $('body').prepend(commuique_menu);
+        $('#communique-counter').hide();
+        
+        get_communique_count();
+        var intervalID = window.setInterval("get_communique_count();", 30*1000);
+    });
+</script>
+
+<style type="text/css" media="screen">
+    #communique-menu
+    {
+        background-color:#246;
+        color:#FFF;
+        position:absolute;
+        top:0;
+        left:0;
+        padding:5px 10px;
+        cursor:pointer;
+    }
+    
+    #communique-counter
+    {
+        float:right;
+        display:inline-block;
+        background-color:#702;
+        color:#FFF;
+        padding:5px 5px;
+        margin:-5px -10px -5px 10px;
+    }
+    
+    #communique-dropdown
+    {
+        display:none;
+        margin-top:5px;
+        padding-top:5px;
+        border-top:1px solid #000;
+    }
+    
+    .communique-notification-row
+    {
+        height: 38px;
+        margin: 10px 0px;
+        min-width: 400px;
+        display:block;
+        text-decoration:none;
+        color: #CCC;
+    }
+    
+    .communique-notification-row:hover
+    {
+        color: #FFF;
+    }
+    
+    .communique-notification-text
+    {
+        padding-top:5px;
+    }
+    
+    .communique-notification-icon
+    {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+        float: left;
+    }
+</style>
+"""
