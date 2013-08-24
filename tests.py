@@ -83,6 +83,23 @@ class NotificationTester(DBTestClass):
         )
         self.assertEqual(str(page_result), "Response: 200 OK\nContent-Type: text/plain; charset=UTF-8\nTrue")
         
+        # Test mini home
+        page_result = self.make_request(
+            app,
+            "/communique/mini_home",
+            cookies,
+            "There was an error viewing the mini home"
+        )
+        
+        page_result = self.make_request(
+            app,
+            "/communique/home_count",
+            cookies,
+            "There was an error viewing the home count"
+        )
+        self.assertEqual(str(page_result), "Response: 200 OK\nContent-Type: text/plain; charset=UTF-8\n2")
+        
+        # Test remaining views
         page_result = self.make_request(
             app,
             "/communique/view/{}".format(n2.id),
@@ -98,9 +115,6 @@ class NotificationTester(DBTestClass):
             "There was an error viewing the first notification"
         )
         self.assertEqual(str(page_result), "Response: 200 OK\nContent-Type: text/plain; charset=UTF-8\nData")
-        
-        
-        
 
 class FunctionTester(unittest.TestCase):
     def test_register(self):

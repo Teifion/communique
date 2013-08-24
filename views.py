@@ -12,8 +12,11 @@ def home(request):
     the_user = config['get_user_func'](request)
     layout = get_renderer(config['layout']).implementation()
     
+    # Use this for testing
     # from . import api
     # api.send(1, "wordy.new_move", "Fred has made a move", "15")
+    # api.send(1, "wordy.new_game", "Bob has started a game with you", "20")
+    # api.send(1, "wordy.game_lost", "Gemma has won the game", "12")
     
     return dict(
         title        = "Communique",
@@ -22,14 +25,37 @@ def home(request):
         notifications = lib.get_current(user_id=the_user.id),
     )
 
-def save_preferences(request):
+def mini_home(request):
     the_user = config['get_user_func'](request)
     
-    # Do stuff here
-    if "form.submitted" in request.params:
-        pass
+    output = []
     
-    return HTTPFound(location=request.route_url('communique.home'))
+    for n in lib.get_current(user_id=the_user.id):
+        handler = config['handlers'][n.category]
+        
+        output.append("""
+            <a class="communique-notification-row" href="{communique_view}">
+                <img src="{icon}" class="communique-notification-icon" />
+                <div class="communique-notification-text">
+                    {title}: {message}
+                </div>
+            </a>
+        """.format(
+            icon = handler.icon_path,
+            title = handler.label,
+            message = n.message,
+            communique_view = request.route_url('communique.view', notification_id=n.id),
+        ))
+    
+    return "".join(output)
+
+def home_count(request):
+    the_user = config['get_user_func'](request)
+    
+    output = []
+    
+    count = lib.get_current_count(user_id=the_user.id)
+    return str(count)
 
 def view(request):
     the_user = config['get_user_func'](request)
