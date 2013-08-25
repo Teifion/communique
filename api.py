@@ -43,9 +43,10 @@ def send(user, category, message, data, expires=None):
         expires = datetime.now() + expires
     
     # If it's a date then make it a datetime to enusre it'll go into the database fine
-    if isinstance(expires, date):
+    if isinstance(expires, date) and not isinstance(expires, datetime):
         expires = datetime(expires.year, expires.month, expires.day)
     
+    # print(expires)
     n = Notification(
         user     = user,
         message  = message,

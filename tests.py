@@ -130,7 +130,7 @@ class FunctionTester(unittest.TestCase):
         api.register('test_id', 'Title', 'image', r_id)
         
         # Check it won't let us overwrite an existing registrant
-        self.assertRaises(KeyError, api.register, 'test_true', 'Title', 'image', r_true)
+        self.assertRaises(KeyError, api.register, 'test_true', 'Title', 'image', r_true, raise_on_dupe=True)
         
         self.assertEqual(len(config['handlers']), 3)
         self.assertIn('test_false', config['handlers'])
