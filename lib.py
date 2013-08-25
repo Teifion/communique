@@ -34,3 +34,9 @@ def delete(the_notification):
 
 def clear(user_id):
     config['DBSession'].query(Notification).filter(Notification.user == user_id).delete()
+
+def count_of_category(user_id, category):
+    return config['DBSession'].query(func.count(Notification.id)).filter(
+        Notification.user == user_id,
+        Notification.category == category,
+    ).first()[0]

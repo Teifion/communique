@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, date
 from collections import namedtuple
 from .config import config
 from .models import Notification
+from . import lib
  
 NotificationCategory = namedtuple("NotificationCategory", ["name", "label", "icon_path", "handler"])
 def register(name, label, icon_path, handler, raise_on_dupe=False):
@@ -22,12 +23,14 @@ def register(name, label, icon_path, handler, raise_on_dupe=False):
     config['handlers'][name] = nc
     return True
 
-def send(user, category, message, data, expires=None):
+def send(user, category, message, data, expires=None, posted=None, avoid_duplicates=False):
     """
     Category is the key for the registered notification type
     Message is the message that will be displayed in the rectangle
     Data is a string containing information passed to the handler function (as a string)
     Expires is either the datetime it expires or a timedelta of how long it will last
+    Posted allows you to post it to the future
+    Avoid duplicates means it will make sure the user doesn't already have a notification of this type before adding it
     
     Examples:
     send(1, "wordy.new_move", "Fred has made a move", "15", timedelta(hours=6))
@@ -38,7 +41,15 @@ def send(user, category, message, data, expires=None):
     if category not in config['handlers']:
         raise KeyError("No handler for the communique category of '{}'".format(category))
     
+    if avoid_duplicates:
+        c = lib.count_of_category(user, category)
+        if c > 0:
+            return False
+    
     # If it's a timedelta then convert it to a datetime
+    if posted is None:
+        posted = datetime.now()
+    
     if isinstance(expires, timedelta):
         expires = datetime.now() + expires
     
@@ -53,7 +64,7 @@ def send(user, category, message, data, expires=None):
         category = category,
         data     = data,
         expires  = expires,
-        posted   = datetime.now(),
+        posted   = posted,
     )
     
     config['DBSession'].add(n)

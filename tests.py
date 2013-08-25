@@ -65,6 +65,7 @@ class NotificationTester(DBTestClass):
         api.send(user=user_id, category="test_true", message="Test message", data="Data", expires=timedelta(hours=4))
         api.send(user=user_id, category="test_false", message="Test message", data="Data", expires=date(year=now.year, month=now.month, day=now.day))
         api.send(user=user_id, category="test_id", message="Test message", data="Data", expires=now)
+        api.send(user=user_id, category="test_id", message="Test message", data="Data 2", expires=now, avoid_duplicates=True)
         
         # Check all of them got added
         notification_list = list(config['DBSession'].query(Notification).order_by(Notification.id.asc()))
