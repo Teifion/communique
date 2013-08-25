@@ -2,21 +2,25 @@ from datetime import datetime, timedelta, date
 from collections import namedtuple
 from .config import config
 from .models import Notification
-
+ 
 NotificationCategory = namedtuple("NotificationCategory", ["name", "label", "icon_path", "handler"])
-def register(name, label, icon_path, handler):
+def register(name, label, icon_path, handler, raise_on_dupe=False):
     """
     Examples:
     register('wordy.new_game', 'New game', 'new_game.png', wordy_game_forward)
     register('wordy.new_move', 'New move', 'new_move.png', wordy_game_forward)
     register('wordy.game_lost', 'Game lost', 'game_lost.png', wordy_view_stats)
     """
-    
+   
     if name in config['handlers']:
-        raise KeyError("{} already exists".format(name))
-    
+        if raise_on_dupe:
+            raise KeyError("{} already exists".format(name))
+        else:
+            return False
+   
     nc = NotificationCategory(name, label, icon_path, handler)
     config['handlers'][name] = nc
+    return True
 
 def send(user, category, message, data, expires=None):
     """
@@ -101,7 +105,7 @@ def send(user, category, message, data, expires=None):
         $('body').prepend(commuique_menu);
         $('#communique-counter').hide();
         
-        get_communique_count();
+        var tout = window.setTimeout("get_communique_count();", 5000);
         var intervalID = window.setInterval("get_communique_count();", 30*1000);
     });
 </script>
