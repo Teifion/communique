@@ -31,3 +31,6 @@ def get_current_count(user_id):
 
 def delete(the_notification):
     config['DBSession'].delete(the_notification)
+
+def clear(user_id):
+    config['DBSession'].query(Notification).filter(Notification.user == user_id).delete()

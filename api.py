@@ -97,7 +97,7 @@ def send(user, category, message, data, expires=None):
     }
     
     $(function() {
-        var commuique_menu = "<div id='communique-menu'><div onclick='show_communique_menu();'>Notifications<div id='communique-counter'></div></div><div id='communique-dropdown'></div></div>";
+        var commuique_menu = "<div id='communique-menu'><a href='${request.route_url("communique.home")}' id='communique-link'>&#9881;</a><div onclick='show_communique_menu();'>Notifications<div id='communique-counter'></div></div><div id='communique-dropdown'></div></div>";
         $('body').prepend(commuique_menu);
         $('#communique-counter').hide();
         
@@ -107,6 +107,20 @@ def send(user, category, message, data, expires=None):
 </script>
 
 <style type="text/css" media="screen">
+    #communique-link
+    {
+        display:inline-block;
+        color: #CCC;
+        text-decoration:none;
+        float: left;
+        padding-right: 10px;
+    }
+    
+    #communique-link:hover
+    {
+        color: #FFF;
+    }
+    
     #communique-menu
     {
         background-color:#246;
@@ -116,6 +130,7 @@ def send(user, category, message, data, expires=None):
         left:0;
         padding:5px 10px;
         cursor:pointer;
+        min-width: 150px;
     }
     
     #communique-counter

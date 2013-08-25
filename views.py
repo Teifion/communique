@@ -13,18 +13,35 @@ def home(request):
     layout = get_renderer(config['layout']).implementation()
     
     # Use this for testing
-    from . import api
-    api.send(1, "wordy.new_move", "Fred has made a move", "15")
-    api.send(1, "wordy.new_game", "Bob has started a game with you", "20")
+    # from . import api
+    # api.send(1, "wordy.new_move", "Fred has made a move", "15")
+    # api.send(1, "wordy.new_game", "Bob has started a game with you", "20")
+    
+    def notification_yield():
+        for n in lib.get_current(user_id=the_user.id):
+            handler = config['handlers'][n.category]
+            yield n, handler
     
     return dict(
         title        = "Communique",
         layout       = layout,
         the_user     = the_user,
-        notifications = lib.get_current(user_id=the_user.id),
+        notifications = notification_yield(),
     )
 
+def action(request):
+    the_user = config['get_user_func'](request)
+    the_action = request.matchdict['action']
+    
+    if the_action == "clear":
+        lib.clear(the_user.id)
+    else:
+        raise KeyError("No handler for action of '{}'".format(the_action))
+    
+    return HTTPFound(location=request.route_url('communique.home'))
+
 def mini_home(request):
+    request.do_not_log = True
     the_user = config['get_user_func'](request)
     
     output = []
@@ -49,6 +66,7 @@ def mini_home(request):
     return "".join(output)
 
 def home_count(request):
+    request.do_not_log = True
     the_user = config['get_user_func'](request)
     
     output = []
@@ -57,6 +75,7 @@ def home_count(request):
     return str(count)
 
 def view(request):
+    request.do_not_log = True
     the_user = config['get_user_func'](request)
     
     notification_id = int(request.matchdict['notification_id'])
