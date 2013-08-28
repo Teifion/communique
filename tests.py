@@ -19,10 +19,14 @@ class DBTestClass(unittest.TestCase):
         DBSession.execute("ROLLBACK")
         self.session.remove()
     
-    def make_request(self, app, path, data, msg="", expect_forward=False, allow_graceful=[]):
-        pass
-        # Stuff that tests a view goes here
-        
+    def get_app(self, auth):
+        # Auth is a username of the user you're authing as
+        # Code that returns a testapp and cookie data
+    
+    def make_request(self, app, path, data, msg="", expect_forward=False):
+        # Makes a request and checks for errors
+        # Provides a custome message on failure
+        # Allows expected fowards
 
 Sadly I couldn't work out how to detatch this part from my
 main framework. The key part is it'll allow us to use the db connection.
@@ -33,6 +37,9 @@ try:
 except Exception:
     class DBTestClass(object):
         pass
+
+# We assume this is the user your system will grab for us
+user_id = 1
 
 class NotificationTester(DBTestClass):
     def test_lifecycle(self):
@@ -45,7 +52,6 @@ class NotificationTester(DBTestClass):
         
         # We'll need these later
         app, cookies = self.get_app()
-        user_id = cookies['_user_id']
         
         # Register them, the test_register function below tests the accuracy of this
         api.register('test_true', 'Title', 'image', r_true)
