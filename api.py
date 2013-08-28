@@ -82,34 +82,31 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
         }
         else
         {
-            $('#communique-dropdown').load(
-                '${request.route_url('communique.mini_home')}',
-                {},
-                function () {
-                    $("#communique-dropdown").show(250);
+            $.ajax({
+                url: '${request.route_url('communique.mini_home')}',
+                type: 'get',
+                async: false,
+                cache: false,
+                success: function(data) {
+                    $('#communique-dropdown').html(data);
+                    $('#communique-dropdown').show(250);
                 }
-            );
+            });
         }
     }
     
     function get_communique_count ()
     {
-        var result = '0';
         $.ajax({
             url: '${request.route_url('communique.home_count')}',
             type: 'get',
             async: false,
+            cache: false,
             success: function(data) {
-                result = data;
+                $('#communique-counter').html('(' + data + ')');
+                $('#communique-counter').show(100);
             }
         });
-        
-        if (result != '0')
-        {
-            $('#communique-counter').html('(' + result + ')');
-            $('#communique-counter').show(100);
-        }
-        
     }
     
     $(function() {
