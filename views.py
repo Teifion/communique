@@ -67,11 +67,11 @@ def mini_home(request):
 
 def home_count(request):
     request.do_not_log = True
-    the_user = config['get_user_func'](request)
+    user_id = int(request.matchdict['user_id'])
+    count = lib.get_current_count(user_id=user_id)
     
-    output = []
-    
-    count = lib.get_current_count(user_id=the_user.id)
+    # the_user = config['get_user_func'](request)
+    # count = lib.get_current_count(user_id=the_user.id)
     return str(count)
 
 def view(request):
