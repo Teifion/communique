@@ -4,6 +4,7 @@ import datetime
 from pyramid.httpexceptions import HTTPFound
 
 from pyramid.renderers import get_renderer
+from pyramid.renderers import render_to_response
 
 from .config import config
 from . import lib
@@ -84,19 +85,25 @@ def view(request):
     if the_notification is None:
         layout = get_renderer(config['layout']).implementation()
         
-        return dict(
-            title   = "View notification",
-            layout  = layout,
-            message = "We couldn't find that notification!",
+        return render_to_response("templates/view.pt",
+            dict(
+                title   = "View notification",
+                layout  = layout,
+                message = "We couldn't find that notification!",
+            ),
+            request = request,
         )
     
     if the_notification.user != the_user.id:
         layout = get_renderer(config['layout']).implementation()
         
-        return dict(
-            title   = "View notification",
-            layout  = layout,
-            message = "Only the appointed user can view the notification (and we don't think that's you sorry)",
+        return render_to_response("templates/view.pt",
+            dict(
+                title   = "View notification",
+                layout  = layout,
+                message = "Only the appointed user can view the notification (and we don't think that's you sorry)",
+            ),
+            request = request,
         )
     
     handler = config['handlers'][the_notification.category].handler

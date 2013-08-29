@@ -100,7 +100,7 @@ class NotificationTester(DBTestClass):
         
         page_result = self.make_request(
             app,
-            "/communique/home_count",
+            "/communique/home_count/{}".format(user_id),
             cookies,
             "There was an error viewing the home count"
         )

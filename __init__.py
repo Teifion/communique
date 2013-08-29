@@ -21,8 +21,11 @@ def includeme(config):
     config.add_view(views.home, route_name='communique.home', renderer='templates/home.pt', permission='loggedin')
     config.add_view(views.action, route_name='communique.action', permission='loggedin')
     config.add_view(views.mini_home, route_name='communique.mini_home', renderer='string', permission='loggedin')
+    
     # config.add_view(views.home_count, route_name='communique.home_count', renderer='string', permission='loggedin')
     config.add_view(views.home_count, route_name='communique.home_count', renderer='string')
-    config.add_view(views.view, route_name='communique.view', renderer="templates/view.pt", permission='loggedin')
+    
+    # config.add_view(views.view, route_name='communique.view', renderer="templates/view.pt", permission='loggedin')
+    config.add_view(views.view, route_name='communique.view', renderer="string", permission='loggedin')
     
     return config
