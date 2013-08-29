@@ -82,10 +82,22 @@ def view(request):
     the_notification = lib.get(notification_id)
     
     if the_notification is None:
-        raise Exception("No notification found")
+        layout = get_renderer(config['layout']).implementation()
+        
+        return dict(
+            title   = "View notification",
+            layout  = layout,
+            message = "We couldn't find that notification!",
+        )
     
     if the_notification.user != the_user.id:
-        raise Exception("Only the appointed user can view the notification")
+        layout = get_renderer(config['layout']).implementation()
+        
+        return dict(
+            title   = "View notification",
+            layout  = layout,
+            message = "Only the appointed user can view the notification (and we don't think that's you sorry)",
+        )
     
     handler = config['handlers'][the_notification.category].handler
     data = the_notification.data
