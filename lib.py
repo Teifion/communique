@@ -40,3 +40,12 @@ def count_of_category(user_id, category):
         Notification.user == user_id,
         Notification.category == category,
     ).first()[0]
+
+def cleanup():
+    """
+    Deletes all expired notifications
+    """
+    
+    config['DBSession'].query(Notification).filter(
+        Notification.expires < datetime.now(),
+    ).delete()
