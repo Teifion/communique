@@ -55,6 +55,16 @@
             color: #FFF;
         }
         
+        .communique-notification-read
+        {
+            color: #888;
+        }
+        
+        .communique-notification-read:hover
+        {
+            color: #AAA;
+        }
+        
         .communique-notification-text
         {
             padding-top:5px;
@@ -84,11 +94,52 @@
             <input type="submit" value="Submit" name="form.submitted" class="inbutton" />
         </form>
         
-        <div style="float:right; width:200px;">
+        <div style="float:right; width:350px;">
             <a class="button" href="${request.route_url('communique.action', action='clear')}">Clear all notifications</a>
+            
+            <form action="${request.route_url('communique.create')}" method="post" accept-charset="utf-8" tal:condition="'code' in request.user.permissions()">
+                 <script type="text/javascript" charset="utf-8">        
+                    $(function() {
+                        $('#user').focus();
+                    });
+                </script>
+                
+                <br /><br />
+                <h3>Manually send</h3>
+                <table border="1" cellspacing="0" cellpadding="5" style="width:100%;">
+                    <tr>
+                        <td><label for="user">User:</label></td>
+                        <td style="padding:2px;">
+                            <input type="text" name="user" id="user" value="" style="width:100%;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="category">Category:</label></td>
+                        <td>
+                            <select name="category" id="category" style="width:100%;">
+                                <option tal:repeat="o options" value="${o}">${o}</option>
+                            </select>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="data">Data:</label></td>
+                        <td style="padding:2px;">
+                            <input type="text" name="data" id="data" value="" style="width:100%;"/>
+                        </td>
+                    </tr>
+                    
+                </table>
+                
+                <input type="submit" value="Submit" name="form.submitted" class="button" />
+            </form>
+            
         </div>
         
         <div class="communique-dropdown communique-menu">
+            ${structure:notifications}
+        </div>
+        
+        <div class="communique-dropdown communique-menu" tal:condition="False">
             <a tal:repeat="(n, handler) notifications" class="communique-notification-row" href="${request.route_url('communique.view', notification_id=n.id)}">
                 <img src="${handler.icon_path}" class="communique-notification-icon" />
                 <div class="communique-notification-text">

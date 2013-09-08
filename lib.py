@@ -1,6 +1,6 @@
 from sqlalchemy import or_, func
 from .config import config
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from . models import Notification
 
@@ -16,7 +16,7 @@ def get_current(user_id):
         or_(Notification.expires > now, Notification.expires == None),
     )
     
-    return config['DBSession'].query(Notification).filter(*filters).order_by(Notification.posted.desc())
+    return config['DBSession'].query(Notification).filter(*filters).order_by(Notification.read.asc(), Notification.posted.desc())
 
 def get_current_count(user_id):
     now = datetime.now()
@@ -24,6 +24,7 @@ def get_current_count(user_id):
     filters = (
         Notification.user == int(user_id),
         Notification.posted < now,
+        Notification.read == False,
         or_(Notification.expires > now, Notification.expires == None),
     )
     
@@ -31,6 +32,17 @@ def get_current_count(user_id):
 
 def delete(the_notification):
     config['DBSession'].delete(the_notification)
+
+def mark_as_read(the_notification):
+    max_expires = datetime.now() + timedelta(hours=12)
+    
+    if the_notification.expires == None:
+        the_notification.expires = max_expires
+    
+    the_notification.expires = min(max_expires, the_notification.expires)
+    the_notification.read = True
+    
+    config['DBSession'].add(the_notification)
 
 def clear(user_id):
     config['DBSession'].query(Notification).filter(Notification.user == user_id).delete()

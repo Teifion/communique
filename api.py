@@ -118,8 +118,8 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
         $('body').prepend(commuique_menu);
         $('#communique-counter').hide();
         
-        var tout = window.setTimeout("get_communique_count();", 5000);
-        var intervalID = window.setInterval("get_communique_count();", 30*1000);
+        get_communique_count();
+        var intervalID = window.setInterval("get_communique_count();", 60*1000);
     });
 </script>
 
@@ -165,6 +165,8 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
         display:none;
         margin-top:5px;
         padding-top:5px;
+        overflow:auto;
+        max-height: 400px;
         border-top:1px solid #000;
     }
     
@@ -176,11 +178,22 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
         display:block;
         text-decoration:none;
         color: #CCC;
+        margin-right:20px;
     }
     
     .communique-notification-row:hover
     {
         color: #FFF;
+    }
+    
+    .communique-notification-read
+    {
+        color: #888;
+    }
+    
+    .communique-notification-read:hover
+    {
+        color: #AAA;
     }
     
     .communique-notification-text

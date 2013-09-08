@@ -13,21 +13,42 @@ def home(request):
     the_user = config['get_user_func'](request)
     layout = get_renderer(config['layout']).implementation()
     
-    # Use this for testing
-    # from . import api
-    # api.send(1, "wordy.new_move", "Fred has made a move", "15")
-    # api.send(1, "wordy.new_game", "Bob has started a game with you", "20")
+    output = []
+    last_was_unread = True
+    for i, n in enumerate(lib.get_current(user_id=the_user.id)):
+        handler = config['handlers'][n.category]
+        
+        # Add a spacer between read and unread but only if they're mixed, not if all are read
+        if n.read == True and last_was_unread:
+            last_was_read = False
+            if i > 0:
+                output.append("<hr />")
+        
+        output.append("""
+            <a class="communique-notification-row {read}" href="{communique_view}">
+                <img src="{icon}" class="communique-notification-icon" />
+                <div class="communique-notification-text">
+                    <strong>{title}</strong>: {message}
+                </div>
+            </a>
+        """.format(
+            icon = handler.icon_path,
+            title = handler.label,
+            message = n.message,
+            communique_view = request.route_url('communique.view', notification_id=n.id),
+            read = "communique-notification-read" if n.read else "communique-notification-unread",
+        ))
     
-    def notification_yield():
-        for n in lib.get_current(user_id=the_user.id):
-            handler = config['handlers'][n.category]
-            yield n, handler
+    options = list(config['handlers'].keys())
+    options.sort()
     
     return dict(
-        title        = "Communique",
-        layout       = layout,
-        the_user     = the_user,
-        notifications = notification_yield(),
+        title         = "Communique",
+        layout        = layout,
+        the_user      = the_user,
+        notifications = "".join(output),
+        
+        options       = options,
     )
 
 def action(request):
@@ -46,12 +67,19 @@ def mini_home(request):
     the_user = config['get_user_func'](request)
     
     output = []
+    last_was_unread = True
     
-    for n in lib.get_current(user_id=the_user.id):
+    for i, n in enumerate(lib.get_current(user_id=the_user.id)):
         handler = config['handlers'][n.category]
         
+        # Add a spacer between read and unread but only if they're mixed, not if all are read
+        if n.read == True and last_was_unread:
+            last_was_read = False
+            if i > 0:
+                output.append("<hr />")
+        
         output.append("""
-            <a class="communique-notification-row" href="{communique_view}">
+            <a class="communique-notification-row {read}" href="{communique_view}">
                 <img src="{icon}" class="communique-notification-icon" />
                 <div class="communique-notification-text">
                     <strong>{title}</strong>: {message}
@@ -62,6 +90,7 @@ def mini_home(request):
             title = handler.label,
             message = n.message,
             communique_view = request.route_url('communique.view', notification_id=n.id),
+            read = "communique-notification-read" if n.read else "communique-notification-unread",
         ))
     
     return "".join(output)
@@ -108,6 +137,9 @@ def view(request):
     
     handler = config['handlers'][the_notification.category].handler
     data = the_notification.data
-    lib.delete(the_notification)
+    lib.mark_as_read(the_notification)
     
     return handler(request, data)
+
+def create(request):
+    pass

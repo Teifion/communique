@@ -4,6 +4,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     DateTime,
+    Boolean,
 )
 
 # You will need to point this to wherever your declarative base is
@@ -14,6 +15,7 @@ class Notification(Base):
     id            = Column(Integer, primary_key=True)
     user          = Column(Integer, ForeignKey("users.id"), nullable=False, primary_key=True)
     posted        = Column(DateTime, nullable=False)
+    read          = Column(Boolean, nullable=False, default=False)
     expires       = Column(DateTime)
     
     message       = Column(String, nullable=False)
