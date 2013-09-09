@@ -16,7 +16,7 @@ def get_current(user_id):
         or_(Notification.expires > now, Notification.expires == None),
     )
     
-    return config['DBSession'].query(Notification).filter(*filters).order_by(Notification.read.asc(), Notification.posted.desc())
+    return config['DBSession'].query(Notification).filter(*filters).order_by(Notification.read.asc(), Notification.posted.desc()).limit(20)
 
 def get_current_count(user_id):
     now = datetime.now()
@@ -61,3 +61,12 @@ def cleanup():
     config['DBSession'].query(Notification).filter(
         Notification.expires < datetime.now(),
     ).delete()
+
+def get_user(username):
+    # My usernames are all uppercase so I'm applying this, not sure how to make this more generic yet sorry
+    username = username.strip().upper()
+    r = config['DBSession'].query(config['User'].id).filter(config['User'].name == username).first()
+    
+    if r is None:
+        return None
+    return r[0]

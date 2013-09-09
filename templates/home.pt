@@ -101,12 +101,19 @@
                  <script type="text/javascript" charset="utf-8">        
                     $(function() {
                         $('#user').focus();
+                        
+                        $("#expires").datepicker({
+                            showButtonPanel: true,
+                            dateFormat: "dd/mm/yy",
+                            showOtherMonths: true,
+                            selectOtherMonths: true
+                        });
                     });
                 </script>
                 
                 <br /><br />
                 <h3>Manually send</h3>
-                <table border="1" cellspacing="0" cellpadding="5" style="width:100%;">
+                <table border="0" cellspacing="0" cellpadding="5" style="width:100%;">
                     <tr>
                         <td><label for="user">User:</label></td>
                         <td style="padding:2px;">
@@ -127,7 +134,18 @@
                             <input type="text" name="data" id="data" value="" style="width:100%;"/>
                         </td>
                     </tr>
-                    
+                    <tr>
+                        <td><label for="message">Message:</label></td>
+                        <td style="padding:2px;">
+                            <input type="text" name="message" id="message" value="" style="width:100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="expires">Expires:</label></td>
+                        <td style="padding:2px;">
+                            <input type="text" name="expires" id="expires" value="" style="width:100%;"/>
+                        </td>
+                    </tr>
                 </table>
                 
                 <input type="submit" value="Submit" name="form.submitted" class="button" />

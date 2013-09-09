@@ -6,6 +6,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.renderers import get_renderer
 from pyramid.renderers import render_to_response
 
+from . import api
 from .config import config
 from . import lib
 
@@ -142,4 +143,20 @@ def view(request):
     return handler(request, data)
 
 def create(request):
-    pass
+    username = request.params['user']
+    user_id = lib.get_user(username)
+    
+    if user_id is None:
+        raise ValueError("No user found")
+    
+    category = request.params['category']
+    
+    if category not in config['handlers']:
+        raise KeyError("No handler for category of '%s'" % category)
+    
+    # Not implemented yet
+    expires = None
+    api.send(user_id, category, request.params['message'], request.params['data'], expires)
+    
+    return HTTPFound(location=request.route_url('communique.home'))
+    

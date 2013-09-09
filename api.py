@@ -165,7 +165,6 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
         display:none;
         margin-top:5px;
         padding-top:5px;
-        overflow:auto;
         max-height: 400px;
         border-top:1px solid #000;
     }
