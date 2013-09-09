@@ -95,7 +95,8 @@
         </form>
         
         <div style="float:right; width:350px;">
-            <a class="button" href="${request.route_url('communique.action', action='clear')}">Clear all notifications</a>
+            <a class="button" href="${request.route_url('communique.action', action='clear')}">Clear read notifications</a>
+            <a class="button" href="${request.route_url('communique.action', action='clear_all')}">Clear all notifications</a>
             
             <form action="${request.route_url('communique.create')}" method="post" accept-charset="utf-8" tal:condition="'code' in request.user.permissions()">
                  <script type="text/javascript" charset="utf-8">        

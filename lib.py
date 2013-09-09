@@ -44,8 +44,13 @@ def mark_as_read(the_notification):
     
     config['DBSession'].add(the_notification)
 
-def clear(user_id):
-    config['DBSession'].query(Notification).filter(Notification.user == user_id).delete()
+def clear(user_id, clear_all=False):
+    filters = [Notification.user == user_id]
+    
+    if not clear_all:
+        filters.append(Notification.read == True)
+    
+    config['DBSession'].query(Notification).filter(*filters).delete()
 
 def count_of_category(user_id, category):
     return config['DBSession'].query(func.count(Notification.id)).filter(

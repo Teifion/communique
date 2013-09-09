@@ -58,6 +58,8 @@ def action(request):
     
     if the_action == "clear":
         lib.clear(the_user.id)
+    elif the_action == "clear_all":
+        lib.clear(the_user.id, clear_all=True)
     else:
         raise KeyError("No handler for action of '{}'".format(the_action))
     
