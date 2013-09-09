@@ -42,6 +42,7 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
         raise KeyError("No handler for the communique category of '{}'".format(category))
     
     if avoid_duplicates:
+        lib.clear(user, category=category)
         c = lib.count_of_category(user, category)
         if c > 0:
             return False

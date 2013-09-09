@@ -44,11 +44,14 @@ def mark_as_read(the_notification):
     
     config['DBSession'].add(the_notification)
 
-def clear(user_id, clear_all=False):
+def clear(user_id, category=None, clear_all=False):
     filters = [Notification.user == user_id]
     
     if not clear_all:
         filters.append(Notification.read == True)
+    
+    if category != None:
+        filters.append(Notification.category == category)
     
     config['DBSession'].query(Notification).filter(*filters).delete()
 
