@@ -21,7 +21,7 @@ def home(request):
         
         # Add a spacer between read and unread but only if they're mixed, not if all are read
         if n.read == True and last_was_unread:
-            last_was_read = False
+            last_was_unread = False
             if i > 0:
                 output.append("<hr />")
         
@@ -75,7 +75,7 @@ def mini_home(request):
         
         # Add a spacer between read and unread but only if they're mixed, not if all are read
         if n.read == True and last_was_unread:
-            last_was_read = False
+            last_was_unread = False
             if i > 0:
                 output.append("<hr />")
         
