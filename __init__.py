@@ -1,7 +1,20 @@
 from .api import register, send
 
+def communique_nimblescan():
+    try:
+        from ..nimblescan import api as ns_api
+    except ImportError:
+        try:
+            from ...nimblescan import api as ns_api
+        except ImportError:
+            return
+    
+    ns_api.register('communique.home', "Notifications", ['communique'], (lambda r: True), ns_api.make_forwarder("communique.home"))
+
 def includeme(config):
     from . import views
+    
+    communique_nimblescan()
     
     """
     Pass this to your configurator object like so:

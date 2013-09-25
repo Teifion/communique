@@ -13,7 +13,7 @@ from ..models import Base
 class Notification(Base):
     __tablename__ = 'notifications'
     id            = Column(Integer, primary_key=True)
-    user          = Column(Integer, ForeignKey("users.id"), nullable=False, primary_key=True)
+    user          = Column(Integer, ForeignKey("users.id"), nullable=False)
     posted        = Column(DateTime, nullable=False)
     read          = Column(Boolean, nullable=False, default=False)
     expires       = Column(DateTime)
