@@ -72,7 +72,7 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
 
 """
     Javascript and CSS to insert
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="utf-8" tal:condition="hasattr(request, 'user')">
     function show_communique_menu ()
     {
         var is_vis = $("#communique-dropdown").is(":visible");
