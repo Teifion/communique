@@ -98,7 +98,7 @@ def send(user, category, message, data, expires=None, posted=None, avoid_duplica
         $.ajax({
             url: '${request.route_url('communique.home_count', user_id=request.user.id)}',
             type: 'get',
-            async: false,
+            async: true,
             cache: false,
             success: function(data) {
                 if (data != '0')

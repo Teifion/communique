@@ -122,6 +122,10 @@ class NotificationTester(DBTestClass):
             "There was an error viewing the first notification"
         )
         self.assertEqual(str(page_result), "Response: 200 OK\nContent-Type: text/plain; charset=UTF-8\nData")
+        
+        with transaction.manager:
+            config['DBSession'].execute("DELETE FROM {} WHERE category IN ('test_id', 'test_true', 'test_false')".format(Notification.__tablename__))
+            config['DBSession'].execute("COMMIT")
 
 class FunctionTester(unittest.TestCase):
     def test_register(self):
